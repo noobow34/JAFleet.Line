@@ -19,6 +19,12 @@ namespace jafleet.Line.Controllers
             _services = serviceScopeFactory;
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return Content(_context.AircraftViews.Count().ToString());
+        }
+
         [HttpPost]
         public async Task<IActionResult> IndexAsync()
         {
