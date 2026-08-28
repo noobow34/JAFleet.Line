@@ -2,7 +2,7 @@
 
 namespace JAFleet.Line.Constants
 {
-    public static class ReplayMessage
+    public static class ReplyMessage
     {
         public static readonly ISendMessage[] FOLLOW_MESSAGE = new ISendMessage[]
         {

@@ -31,7 +31,7 @@ namespace JAFleet.Line
         /// <returns></returns>
         protected override async Task OnFollowAsync(FollowEvent ev)
         {
-            await messagingClient.ReplyMessageAsync(ev.ReplyToken, ReplayMessage.FOLLOW_MESSAGE);
+            await messagingClient.ReplyMessageAsync(ev.ReplyToken, ReplyMessage.FOLLOW_MESSAGE);
 
             //ユーザーに返信してからログを処理
             DateTime? followDate = DateTime.Now;
@@ -144,13 +144,13 @@ namespace JAFleet.Line
             string? upperedReg = userMessage.Split("\n")?[0].ToUpper();
             string? jaAddUpperedReg = upperedReg;
             string? firstLine = userMessage.Split("\n")?[0];
-            var replay = new List<ISendMessage>();
+            var reply = new List<ISendMessage>();
 
             var compareTarget = DateTime.Now;
 
             if (userMessage.Contains(CommandConstant.MESSAGE))
             {
-                await messagingClient.ReplyMessageAsync(replyToken, [ReplayMessage.SEND_MESSAGE]);
+                await messagingClient.ReplyMessageAsync(replyToken, [ReplyMessage.SEND_MESSAGE]);
                 string messageBody = userMessage.Replace(CommandConstant.MESSAGE + "\n", string.Empty);
                 var m = new Message
                 {
@@ -167,7 +167,7 @@ namespace JAFleet.Line
             }
             else if (userMessage.Contains(CommandConstant.HOWTOSEARCH))
             {
-                await messagingClient.ReplyMessageAsync(replyToken, [ReplayMessage.HOWTO_SEARCH]);
+                await messagingClient.ReplyMessageAsync(replyToken, [ReplyMessage.HOWTO_SEARCH]);
             }
             else
             {
@@ -195,23 +195,23 @@ namespace JAFleet.Line
                         $" 特別塗装:{av.SpecialLivery} \n " + 
                         $" 備考:{av.Remarks}";
 
-                    replay.Add(new TextMessage(aircraftInfo));
+                    reply.Add(new TextMessage(aircraftInfo));
                 }
 
                 if (!string.IsNullOrEmpty(av?.PhotoDirectLarge))
                 {
-                    replay.Add(new ImageMessage(av.PhotoDirectLarge, av.PhotoDirectSmall));
+                    reply.Add(new ImageMessage(av.PhotoDirectLarge, av.PhotoDirectSmall));
                 }
                 else if (av ==null)
                 {
                     var ap2 = await AircraftDataExtractor.GetAircraftPhotoAnyRegistrationNumberAsync(upperedReg!, _context);
                     if (ap2 != null)
                     {
-                        replay.Add(new ImageMessage(ap2.PhotoDirectLarge, ap2.PhotoDirectSmall));
+                        reply.Add(new ImageMessage(ap2.PhotoDirectLarge, ap2.PhotoDirectSmall));
                     }
                     else
                     {
-                        replay.Add(ReplayMessage.NOT_FOUND);
+                        reply.Add(ReplyMessage.NOT_FOUND);
                     }
                 }
 
@@ -221,7 +221,7 @@ namespace JAFleet.Line
                     return;
                 }
 
-                await messagingClient.ReplyMessageAsync(replyToken, replay);
+                await messagingClient.ReplyMessageAsync(replyToken, reply);
 
                 var processDate = DateTime.Now;
                 //ユーザーに返信してからログを処理
