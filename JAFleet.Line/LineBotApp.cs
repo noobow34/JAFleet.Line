@@ -159,7 +159,7 @@ namespace JAFleet.Line
                     MessageType = Commons.Constants.MessageType.LINE,
                     RecieveDate = DateTime.Now
                 };
-                _context.Messagess.Add(m);
+                _context.Messages.Add(m);
                 _context.SaveChanges();
                 await SlackUtil.PostAsync(SlackChannelEnum.jafleet.GetStringValue(), "【JA-Fleet from LINE】\n" +
                                     "ユーザー：" + (_context.LineUsers.Find(userId)?.UserName ?? userId) + "\n" +
