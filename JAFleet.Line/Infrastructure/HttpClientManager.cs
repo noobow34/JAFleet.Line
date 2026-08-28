@@ -1,4 +1,4 @@
-﻿namespace JAFleet.Line.Manager
+﻿namespace JAFleet.Line.Infrastructure
 {
     public class HttpClientManager
     {

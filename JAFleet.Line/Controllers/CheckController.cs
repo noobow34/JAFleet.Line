@@ -1,5 +1,5 @@
 ﻿using JAFleet.Commons.EF;
-using JAFleet.Line.Manager;
+using JAFleet.Line.Infrastructure;
 using Line.Messaging.Webhooks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

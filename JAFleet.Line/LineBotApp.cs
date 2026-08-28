@@ -1,5 +1,5 @@
 using EnumStringValues;
-using JAFleet.Commons.Aircraft;
+using JAFleet.Commons.Scraping;
 using JAFleet.Commons.Constants;
 using JAFleet.Commons.EF;
 using JAFleet.Line.Constants;

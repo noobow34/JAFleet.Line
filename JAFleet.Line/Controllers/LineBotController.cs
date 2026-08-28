@@ -1,7 +1,7 @@
 using Line.Messaging.Webhooks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using JAFleet.Line.Manager;
+using JAFleet.Line.Infrastructure;
 using JAFleet.Commons.EF;
 
 namespace JAFleet.Line.Controllers
