@@ -1,6 +1,6 @@
 ﻿using Line.Messaging;
 
-namespace jafleet.Line.Constants
+namespace JAFleet.Line.Constants
 {
     public static class ReplayMessage
     {

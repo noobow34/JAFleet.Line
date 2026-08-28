@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>jafleet.Line</RootNamespace>
+    <RootNamespace>JAFleet.Line</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ja-fleet.Commons\ja-fleet.Commons\ja-fleet.Commons.csproj" />
+    <ProjectReference Include="..\..\JAFleet.Commons\JAFleet.Commons\JAFleet.Commons.csproj" />
     <ProjectReference Include="..\..\LineMessagingApi\Line.Messaging\Line.Messaging.csproj" />
     <ProjectReference Include="..\..\Noobow.Commons\Noobow.Commons\Noobow.Commons.csproj" />
   </ItemGroup>

@@ -1,19 +1,19 @@
-﻿using jafleet.Commons.EF;
-using jafleet.Line.Manager;
+﻿using JAFleet.Commons.EF;
+using JAFleet.Line.Manager;
 using Line.Messaging.Webhooks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Noobow.Commons.Extensions;
 using System.Diagnostics;
 
-namespace jafleet.Line.Controllers
+namespace JAFleet.Line.Controllers
 {
     public class CheckController : Controller
     {
-        private readonly JafleetContext _context;
+        private readonly JAFleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public CheckController(JafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public CheckController(JAFleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _services = serviceScopeFactory;

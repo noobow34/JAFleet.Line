@@ -1,4 +1,4 @@
-﻿namespace jafleet.Line.Constants
+﻿namespace JAFleet.Line.Constants
 {
     public static class CommandConstant
     {

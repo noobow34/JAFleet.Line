@@ -2,7 +2,7 @@ using Microsoft.Extensions.Primitives;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace jafleet.Line.Middleware
+namespace JAFleet.Line.Middleware
 {
     /// <summary>
     /// Verify if the request is valid, then returns LINE Webhook events from the request.

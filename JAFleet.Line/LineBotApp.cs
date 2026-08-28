@@ -1,22 +1,22 @@
 using EnumStringValues;
-using jafleet.Commons.Aircraft;
-using jafleet.Commons.Constants;
-using jafleet.Commons.EF;
-using jafleet.Line.Constants;
+using JAFleet.Commons.Aircraft;
+using JAFleet.Commons.Constants;
+using JAFleet.Commons.EF;
+using JAFleet.Line.Constants;
 using Line.Messaging;
 using Line.Messaging.Webhooks;
 using Noobow.Commons.Constants;
 using Noobow.Commons.Utils;
 
-namespace jafleet.Line
+namespace JAFleet.Line
 {
     internal class LineBotApp : WebhookApplication
     {
         private LineMessagingClient messagingClient { get; }
-        private readonly JafleetContext _context;
+        private readonly JAFleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public LineBotApp(LineMessagingClient lineMessagingClient,JafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public LineBotApp(LineMessagingClient lineMessagingClient,JAFleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             this.messagingClient = lineMessagingClient;
             _context = context;
@@ -84,7 +84,7 @@ namespace jafleet.Line
 
                 //LINE_USERにユーザーを記録
                 using var serviceScope = _services.CreateScope();
-                using var context = serviceScope.ServiceProvider.GetService<JafleetContext>();
+                using var context = serviceScope.ServiceProvider.GetService<JAFleetContext>();
                 var lineuser = _context.LineUsers.SingleOrDefault(p => p.UserId == userId);
                 if (lineuser != null)
                 {

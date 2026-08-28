@@ -1,18 +1,18 @@
 using Line.Messaging.Webhooks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using jafleet.Line.Manager;
-using jafleet.Commons.EF;
+using JAFleet.Line.Manager;
+using JAFleet.Commons.EF;
 
-namespace jafleet.Line.Controllers
+namespace JAFleet.Line.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class LineBotController : Controller
     {
-        private readonly JafleetContext _context;
+        private readonly JAFleetContext _context;
         private readonly IServiceScopeFactory _services;
-        public LineBotController(JafleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public LineBotController(JAFleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             _context = context;
             _services = serviceScopeFactory;

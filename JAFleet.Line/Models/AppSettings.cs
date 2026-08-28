@@ -1,4 +1,4 @@
-namespace jafleet.Line.Models
+namespace JAFleet.Line.Models
 {
     public class AppSettings
     {

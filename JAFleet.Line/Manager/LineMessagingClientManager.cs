@@ -1,6 +1,6 @@
 ﻿using Line.Messaging;
 
-namespace jafleet.Line.Manager
+namespace JAFleet.Line.Manager
 {
     public static class LineMessagingClientManager
     {

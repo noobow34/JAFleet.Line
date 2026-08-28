@@ -1,6 +1,6 @@
-using jafleet.Commons.EF;
-using jafleet.Line.Middleware;
-using jafleet.Line.Models;
+using JAFleet.Commons.EF;
+using JAFleet.Line.Middleware;
+using JAFleet.Line.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -15,7 +15,7 @@ Console.WriteLine($"LINE_CHANNEL_SECRET:{lineChannelSecret?.Length ?? 0}");
 Console.WriteLine($"LINE_CHANNEL_ACCESS_TOKEN:{Environment.GetEnvironmentVariable("LINE_CHANNEL_ACCESS_TOKEN")?.Length ?? 0}");
 
 
-builder.Services.AddDbContextPool<JafleetContext>(
+builder.Services.AddDbContextPool<JAFleetContext>(
     options => options.UseNpgsql(connectionString).ConfigureWarnings(warnings =>
     {
         warnings.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning);

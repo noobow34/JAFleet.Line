@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ja-fleet.Line", "ja-fleet.Line\ja-fleet.Line.csproj", "{76663770-05F7-4645-9271-79DF3819F3CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JAFleet.Line", "JAFleet.Line\JAFleet.Line.csproj", "{76663770-05F7-4645-9271-79DF3819F3CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ja-fleet.Commons", "..\ja-fleet.Commons\ja-fleet.Commons\ja-fleet.Commons.csproj", "{86AB0276-BCDE-4097-800E-32D0F936D759}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JAFleet.Commons", "..\JAFleet.Commons\JAFleet.Commons\JAFleet.Commons.csproj", "{86AB0276-BCDE-4097-800E-32D0F936D759}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noobow.Commons", "..\Noobow.Commons\Noobow.Commons\Noobow.Commons.csproj", "{7CACF34E-6E1A-4CA1-8966-36C71BE5071D}"
 EndProject

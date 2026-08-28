@@ -1,4 +1,4 @@
-namespace jafleet.Line.Middleware
+namespace JAFleet.Line.Middleware
 {
     public static class MiddlewareExtensions
     {
