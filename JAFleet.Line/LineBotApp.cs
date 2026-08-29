@@ -1,26 +1,57 @@
 using EnumStringValues;
 using JAFleet.Commons.Scraping;
 using JAFleet.Commons.Constants;
-using JAFleet.Commons.EF;
+using JAFleet.Commons.Data;
 using JAFleet.Line.Constants;
-using Line.Messaging;
-using Line.Messaging.Webhooks;
+using JAFleet.Line.Infrastructure;
+using Line.OpenApi.Messaging;
+using Line.OpenApi.Messaging.Generated.Api.Models;
+using Line.OpenApi.Messaging.Webhook.Generated.Models;
 using Noobow.Commons.Constants;
 using Noobow.Commons.Utils;
+//JAFleet.Commons.Data.Message（DBエンティティ）と名前が衝突するため別名を付ける
+using LineMessage = Line.OpenApi.Messaging.Generated.Api.Models.Message;
 
 namespace JAFleet.Line
 {
-    internal class LineBotApp : WebhookApplication
+    internal class LineBotApp
     {
-        private LineMessagingClient messagingClient { get; }
+        private MessagingClient messagingClient { get; }
         private readonly JAFleetContext _context;
         private readonly IServiceScopeFactory _services;
 
-        public LineBotApp(LineMessagingClient lineMessagingClient,JAFleetContext context, IServiceScopeFactory serviceScopeFactory)
+        public LineBotApp(MessagingClient lineMessagingClient,JAFleetContext context, IServiceScopeFactory serviceScopeFactory)
         {
             this.messagingClient = lineMessagingClient;
             _context = context;
             _services = serviceScopeFactory;
+        }
+
+        /// <summary>
+        /// Webhookイベントを種類ごとに振り分ける
+        /// </summary>
+        /// <param name="events">Webhookイベント</param>
+        /// <param name="isCheck">死活監視からの呼び出しの場合はtrue（返信を行わない）</param>
+        /// <returns></returns>
+        public async Task RunAsync(IEnumerable<Event> events, bool isCheck = false)
+        {
+            foreach (var ev in events)
+            {
+                switch (ev)
+                {
+                    case MessageEvent message:
+                        await OnMessageAsync(message, isCheck);
+                        break;
+                    case FollowEvent follow:
+                        await OnFollowAsync(follow);
+                        break;
+                    case UnfollowEvent unfollow:
+                        await OnUnfollowAsync(unfollow);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -29,13 +60,13 @@ namespace JAFleet.Line
         /// </summary>
         /// <param name="ev"></param>
         /// <returns></returns>
-        protected override async Task OnFollowAsync(FollowEvent ev)
+        private async Task OnFollowAsync(FollowEvent ev)
         {
-            await messagingClient.ReplyMessageAsync(ev.ReplyToken, ReplyMessage.FOLLOW_MESSAGE);
+            await messagingClient.ReplyMessageAsync(ev.ReplyToken!, ReplyMessage.FOLLOW_MESSAGE);
 
             //ユーザーに返信してからログを処理
             DateTime? followDate = DateTime.Now;
-            string userId = ev.Source.UserId;
+            string userId = GetUserId(ev);
 
             var profile = await GetUserProfileAsync(userId);
             Log log = new()
@@ -75,12 +106,12 @@ namespace JAFleet.Line
         /// </summary>
         /// <param name="ev"></param>
         /// <returns></returns>
-        protected override async Task OnUnfollowAsync(UnfollowEvent ev)
+        private async Task OnUnfollowAsync(UnfollowEvent ev)
         {
             await Task.Run(() =>
             {
                 DateTime? unfollowDate = DateTime.Now;
-                string userId = ev.Source.UserId;
+                string userId = GetUserId(ev);
 
                 //LINE_USERにユーザーを記録
                 using var serviceScope = _services.CreateScope();
@@ -119,13 +150,14 @@ namespace JAFleet.Line
         /// メッセージ発生
         /// </summary>
         /// <param name="ev"></param>
+        /// <param name="isCheck">死活監視からの呼び出しの場合はtrue</param>
         /// <returns></returns>
-        protected override async Task OnMessageAsync(MessageEvent ev)
+        private async Task OnMessageAsync(MessageEvent ev, bool isCheck)
         {
-            switch (ev.Message.Type)
+            switch (ev.Message)
             {
-                case EventMessageType.Text:
-                    await HandleTextAsync(ev.ReplyToken, ((TextEventMessage)ev.Message).Text, ev.Source.UserId, ((TextEventMessage)ev.Message).IsCheck);
+                case TextMessageContent text:
+                    await HandleTextAsync(ev.ReplyToken!, text.Text!, GetUserId(ev), isCheck);
                     break;
                 default:
                     break;
@@ -144,7 +176,7 @@ namespace JAFleet.Line
             string? upperedReg = userMessage.Split("\n")?[0].ToUpper();
             string? jaAddUpperedReg = upperedReg;
             string? firstLine = userMessage.Split("\n")?[0];
-            var reply = new List<ISendMessage>();
+            var reply = new List<LineMessage>();
 
             var compareTarget = DateTime.Now;
 
@@ -152,7 +184,7 @@ namespace JAFleet.Line
             {
                 await messagingClient.ReplyMessageAsync(replyToken, [ReplyMessage.SEND_MESSAGE]);
                 string messageBody = userMessage.Replace(CommandConstant.MESSAGE + "\n", string.Empty);
-                var m = new Message
+                var m = new Commons.Data.Message
                 {
                     Sender = userId,
                     MessageDetail = messageBody,
@@ -192,22 +224,22 @@ namespace JAFleet.Line
                         $" 運用状況:{av.Operation} \n " +
                         $" コンフィグ:{av.SeatConfig}\n " +
                         $" WiFi:{av.Wifi} \n " +
-                        $" 特別塗装:{av.SpecialLivery} \n " + 
+                        $" 特別塗装:{av.SpecialLivery} \n " +
                         $" 備考:{av.Remarks}";
 
-                    reply.Add(new TextMessage(aircraftInfo));
+                    reply.Add(LineMessageFactory.Text(aircraftInfo));
                 }
 
                 if (!string.IsNullOrEmpty(av?.PhotoDirectLarge))
                 {
-                    reply.Add(new ImageMessage(av.PhotoDirectLarge, av.PhotoDirectSmall));
+                    reply.Add(LineMessageFactory.Image(av.PhotoDirectLarge, av.PhotoDirectSmall));
                 }
                 else if (av ==null)
                 {
                     var ap2 = await AircraftDataExtractor.GetAircraftPhotoAnyRegistrationNumberAsync(upperedReg!, _context);
                     if (ap2 != null)
                     {
-                        reply.Add(new ImageMessage(ap2.PhotoDirectLarge, ap2.PhotoDirectSmall));
+                        reply.Add(LineMessageFactory.Image(ap2.PhotoDirectLarge, ap2.PhotoDirectSmall));
                     }
                     else
                     {
@@ -246,7 +278,7 @@ namespace JAFleet.Line
                     {
                         //前回アクセスから1週間以上
                         var profile = await GetUserProfileAsync(userId);
-                        lineuser.UserName = profile.DisplayName;
+                        lineuser.UserName = profile?.DisplayName;
                         lineuser.ProfileUpdateTime = processDate;
                     }
                 }
@@ -258,7 +290,7 @@ namespace JAFleet.Line
                     LineUser user = new()
                     {
                         UserId = userId,
-                        UserName = profile.DisplayName,
+                        UserName = profile?.DisplayName,
                         LastAccess = processDate,
                         ProfileUpdateTime = processDate
                     };
@@ -269,13 +301,21 @@ namespace JAFleet.Line
         }
 
         /// <summary>
+        /// イベントの送信元ユーザーIDを取得
+        /// </summary>
+        /// <param name="ev">Webhookイベント</param>
+        /// <returns></returns>
+        private static string GetUserId(Event ev)
+            => (ev.Source as UserSource)?.UserId ?? string.Empty;
+
+        /// <summary>
         /// プロフィールとプロフィール画像を取得
         /// </summary>
         /// <param name="userId">ユーザーID</param>
         /// <returns></returns>
-        private async Task<UserProfile> GetUserProfileAsync(string userId)
+        private async Task<UserProfileResponse?> GetUserProfileAsync(string userId)
         {
-            UserProfile retprofile;
+            UserProfileResponse? retprofile;
 
             retprofile = await messagingClient.GetUserProfileAsync(userId);
 

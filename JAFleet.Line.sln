@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12120.119 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JAFleet.Line", "JAFleet.Line\JAFleet.Line.csproj", "{76663770-05F7-4645-9271-79DF3819F3CC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JAFleet.Commons", "..\JAFleet.Commons\JAFleet.Commons\JAFleet.Commons.csproj", "{86AB0276-BCDE-4097-800E-32D0F936D759}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noobow.Commons", "..\Noobow.Commons\Noobow.Commons\Noobow.Commons.csproj", "{7CACF34E-6E1A-4CA1-8966-36C71BE5071D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Line.Messaging", "..\LineMessagingApi\Line.Messaging\Line.Messaging.csproj", "{308D07D5-7FA3-48F1-A329-838532798AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{7CACF34E-6E1A-4CA1-8966-36C71BE5071D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CACF34E-6E1A-4CA1-8966-36C71BE5071D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CACF34E-6E1A-4CA1-8966-36C71BE5071D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{308D07D5-7FA3-48F1-A329-838532798AE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{308D07D5-7FA3-48F1-A329-838532798AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{308D07D5-7FA3-48F1-A329-838532798AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{308D07D5-7FA3-48F1-A329-838532798AE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

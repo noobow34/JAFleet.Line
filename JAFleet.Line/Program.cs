@@ -1,6 +1,6 @@
-using JAFleet.Commons.EF;
-using JAFleet.Line.Middleware;
+using JAFleet.Commons.Data;
 using JAFleet.Line.Models;
+using Line.OpenApi.Messaging.Webhook.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -22,13 +22,14 @@ builder.Services.AddDbContextPool<JAFleetContext>(
         warnings.Ignore(CoreEventId.FirstWithoutOrderByAndFilterWarning);
     })
 );
-builder.Services.AddMvc().AddNewtonsoftJson();
+builder.Services.AddMvc();
 builder.Services.Configure<AppSettings>(config);
+//Webhookの署名検証＋デシリアライズを行うWebhookRequestParserを登録
+builder.Services.AddLineWebhook(options => options.ChannelSecret = lineChannelSecret!);
 builder.WebHost.UseUrls("http://localhost:6500");
 
 var app = builder.Build();
 
-app.UseLineValidationMiddleware(lineChannelSecret!);
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllerRoute(
