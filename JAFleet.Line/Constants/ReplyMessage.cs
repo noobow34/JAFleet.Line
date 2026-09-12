@@ -20,7 +20,7 @@ namespace JAFleet.Line.Constants
                                                 "（省略不可）\n" +
                                                 "※すべて大文字小文字区別せず"),
             LineMessageFactory.Text("管理人にメッセージを送るには1行目に「メッセージ」と書いて、2行目以降にメッセージを入力してください。"),
-            LineMessageFactory.Image("https://line.ja-fleet.noobow.me/howtouse.jpg", "https://line.ja-fleet.noobow.me/howtouse.jpg")
+            LineMessageFactory.Image("https://ja-fleet-line.noobow.me/howtouse.jpg", "https://ja-fleet-line.noobow.me/howtouse.jpg")
         };
 
         public static readonly TextMessage SEND_MESSAGE = LineMessageFactory.Text("メッセージを受信しました。\n" +
