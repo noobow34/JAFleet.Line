@@ -2,6 +2,7 @@ using EnumStringValues;
 using JAFleet.Commons.Scraping;
 using JAFleet.Commons.Constants;
 using JAFleet.Commons.Data;
+using JAFleet.Commons.Util;
 using JAFleet.Line.Constants;
 using JAFleet.Line.Infrastructure;
 using Line.OpenApi.Messaging;
@@ -220,7 +221,9 @@ namespace JAFleet.Line
                         $" 航空会社:{av.AirlineNameJpShort} \n " +
                         $" 型式:{av.TypeDetailName ?? av.TypeName} \n " +
                         $" 製造番号:{av.SerialNumber} \n " +
-                        $" 登録年月日:{av.RegisterDate} \n " +
+                        //登録年月日・抹消年月日は DateOnly なので、サーバのカルチャに左右されないよう yyyy/MM/dd で書く
+                        $" 登録年月日:{JaDateUtil.Format(av.RegisterDate)} \n " +
+                        (av.DeregisterDate != null ? $" 抹消年月日:{JaDateUtil.Format(av.DeregisterDate)} \n " : "") +
                         $" 運用状況:{av.Operation} \n " +
                         $" コンフィグ:{av.SeatConfig}\n " +
                         $" WiFi:{av.Wifi} \n " +
