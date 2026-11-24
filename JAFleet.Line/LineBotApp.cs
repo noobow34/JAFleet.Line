@@ -1,5 +1,4 @@
 using EnumStringValues;
-using JAFleet.Commons.Scraping;
 using JAFleet.Commons.Constants;
 using JAFleet.Commons.Data;
 using JAFleet.Commons.Util;
@@ -225,10 +224,11 @@ namespace JAFleet.Line
                 }
                 else
                 {
-                    var ap2 = await AircraftDataExtractor.GetAircraftPhotoAnyRegistrationNumberAsync(upperedReg!, _context);
-                    if (ap2 != null)
+                    //登録の無いレジは FR24 の機体ページへのリンクを返す（外のサイトを取りに行くことはしない）
+                    var texts = AircraftReply.BuildUnregisteredTexts(upperedReg!);
+                    if (texts != null)
                     {
-                        reply.Add(LineMessageFactory.Image(ap2.PhotoDirectLarge, ap2.PhotoDirectSmall));
+                        reply.AddRange(texts.Select(LineMessageFactory.Text));
                     }
                     else
                     {

@@ -35,7 +35,7 @@ namespace JAFleet.Line.Constants
 
         public static readonly TextMessage HOWTO_SEARCH = LineMessageFactory.Text("【検索対象】\n"+
                                                                 "JA-Fleet登録データ：JAレジで運航中のもの、2018/09以降に抹消されてもの\n" +
-                                                                "写真のみ検索：Jetphotosサイトに登録されているもの\n" +
+                                                                "それ以外のレジ：Flightradar24 の機体ページ（写真・飛行履歴）へのリンクを返します\n" +
                                                                 "【検索例】\n" +
                                                                 "●JAレジ\n" +
                                                                 "801a,JA301J\n" +
