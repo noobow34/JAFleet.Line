@@ -216,28 +216,14 @@ namespace JAFleet.Line
 
                 if (av != null)
                 {
-                    //JA-Fleetのデータベースで見つかった場合
-                    string aircraftInfo = $"{av.RegistrationNumber} \n " +
-                        $" 航空会社:{av.AirlineNameJpShort} \n " +
-                        $" 型式:{av.TypeDetailName ?? av.TypeName} \n " +
-                        $" 製造番号:{av.SerialNumber} \n " +
-                        //登録年月日・抹消年月日は DateOnly なので、サーバのカルチャに左右されないよう yyyy/MM/dd で書く
-                        $" 登録年月日:{JaDateUtil.Format(av.RegisterDate)} \n " +
-                        (av.DeregisterDate != null ? $" 抹消年月日:{JaDateUtil.Format(av.DeregisterDate)} \n " : "") +
-                        $" 運用状況:{av.Operation} \n " +
-                        $" コンフィグ:{av.SeatConfig}\n " +
-                        $" WiFi:{av.Wifi} \n " +
-                        $" 特別塗装:{av.SpecialLivery} \n " +
-                        $" 備考:{av.Remarks}";
-
-                    reply.Add(LineMessageFactory.Text(aircraftInfo));
+                    //JA-Fleetのデータベースで見つかった場合は、機体情報・JA-Fleet のリンク・FR24 のリンクの3通を返す
+                    //（写真は FR24 のページで見てもらう。リンクは1通ずつにしてプレビューのサムネを出させる）
+                    foreach (string text in AircraftReply.BuildTexts(av))
+                    {
+                        reply.Add(LineMessageFactory.Text(text));
+                    }
                 }
-
-                if (!string.IsNullOrEmpty(av?.PhotoDirectLarge))
-                {
-                    reply.Add(LineMessageFactory.Image(av.PhotoDirectLarge, av.PhotoDirectSmall));
-                }
-                else if (av ==null)
+                else
                 {
                     var ap2 = await AircraftDataExtractor.GetAircraftPhotoAnyRegistrationNumberAsync(upperedReg!, _context);
                     if (ap2 != null)
